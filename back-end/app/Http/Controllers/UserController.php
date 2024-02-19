@@ -34,14 +34,14 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'email' => ['required'],
             'nama' => ['required'],
+            'email' => ['required'],
             'password' => ['required'],
         ]);
 
         User::create([
-            'email' => $request->email,
             'nama' => $request->nama,
+            'email' => $request->email,
             'password' => bcrypt($request->password)
         ]);
 
@@ -66,7 +66,7 @@ class UserController extends Controller
         }else{
             return response()->json([
                 'status' => 'failed',
-                'message' => 'data gagal didapat',
+                'message' => 'request gagal',
             ]);
         }
     }
@@ -80,7 +80,18 @@ class UserController extends Controller
 
         if($user){
             $user->update([
-                
+                'email' => $request->email,
+                'nama' => $request->nama,
+                'password' => bcrypt($request->password)
+            ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'data berhasil di update',
+            ]);
+        }else{         
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'request gagal',
             ]);
         }
     }
@@ -90,6 +101,18 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::where('id', $id)->first();
+        if($user){
+            User::destroy($id);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'data berhasil di hapus',
+            ]);
+        }else{         
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'request gagal',
+            ]);
+        }
     }
 }

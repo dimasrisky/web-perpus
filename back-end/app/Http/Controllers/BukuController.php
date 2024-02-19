@@ -66,20 +66,45 @@ class BukuController extends Controller
             ]);
         }
     }
-
+    
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        $buku = Buku::where('id', $id);
+        if($buku){
+            $buku->update($request->all());
+            return response()->json([
+                'status' => 'success',
+                'message' => 'data berhasil di update',
+            ]);
+        }else{
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'data gagal di update',
+            ]);
+        }
     }
-
+    
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
+        $buku = Buku::where('id', $id);
+        if($buku){
+            Buku::destroy($id);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'data berhasil di hapus',
+            ]);
+        }else{
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'data gagal di hapus',
+            ]);
+        }
+        
     }
 }
